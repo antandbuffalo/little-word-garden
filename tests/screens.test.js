@@ -29,6 +29,22 @@ test('play screen switches from letter entry to next-word action', () => {
   assert.ok(!solved.includes('id="check"'));
 });
 
+test('letter bank displays duplicate tokens and hides only the used token', () => {
+  const html = playScreen({
+    item: { word: 'good', clue: 'The opposite of bad.', icon: '🌟' },
+    index: 0, total: 5, gaps: [1, 2], letters: { 1: 'o' }, selected: 2, solved: false, message: '',
+    letterBank: [{ id: 0, letter: 'o' }, { id: 1, letter: 'o' }, { id: 2, letter: 'a' }],
+    placements: { 1: 0 },
+  });
+  assert.ok(html.includes('class="letter-bank"'));
+  assert.equal((html.match(/data-bank-id=/g) || []).length, 3);
+  assert.equal((html.match(/disabled aria-hidden="true"/g) || []).length, 1);
+  assert.ok(html.includes('data-bank-id="1" aria-label="Letter o" >o</button>'));
+  assert.ok(!html.includes('class="keyboard"'));
+  assert.ok(!html.includes('id="backspace"'));
+  assert.ok(html.includes('tap to return letter'));
+});
+
 test('only incorrect gaps get red wobble feedback', () => {
   const html = playScreen({ item: lesson.words[0], index: 0, total: 1, gaps: [0, 1], letters: { 0: 'c', 1: 'x' }, selected: 1, solved: false, message: 'Try another letter.', incorrect: [1] });
   assert.equal((html.match(/aria-invalid="true"/g) || []).length, 1);

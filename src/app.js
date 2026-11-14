@@ -1,5 +1,6 @@
 import { getLesson, getSubject, getChapter, getSubjectChapters, getChapterLessons, subjects, chapters, lessons } from './data/lessons.js';
 import { makeGaps, chooseRound, shuffle, assessAttempt } from './game/spelling.js';
+import { createLetterBank, availableTiles, placeTile, lettersForPlacements } from './game/letter-bank.js';
 import { createProgressStore } from './storage/progress.js';
 import { homeScreen } from './screens/home.js';
 import { playScreen } from './screens/play.js';
@@ -19,6 +20,7 @@ let rounds = saved.rounds;
 let round = [], index = 0, gaps = [], letters = {}, selected = 0, phase = 'home', helped = false, solved = false, results = [], previousRound = [], message = '';
 let storageAvailable = true;
 let incorrect = [];
+let letterBank = [], placements = {};
 function persist() { storageAvailable = store.save({ progress, rounds }); }
 function title(text) { document.title = `${text} · Little Word Garden`; }
 function home() {
@@ -72,24 +74,37 @@ function beginWord() {
   const item = round[index];
   const record = progress[item.word] || {};
   gaps = makeGaps(item.word, record.wins || 0, record.gaps || []);
+  letterBank = createLetterBank(item.word, gaps);
+  placements = {};
   progress[item.word] = { ...record, gaps }; persist();
   letters = {}; incorrect = []; selected = gaps[0]; helped = false; solved = false; message = ''; phase = 'play'; renderPlay();
 }
 function renderPlay() {
   const active = document.activeElement;
-  const focusSelector = active?.dataset.letter ? `[data-letter="${active.dataset.letter}"]` : active?.dataset.gap ? `[data-gap="${active.dataset.gap}"]` : active?.id === 'backspace' ? '#backspace' : null;
+  const focusSelector = active?.dataset.gap !== undefined ? `[data-gap="${active.dataset.gap}"]` : active?.dataset.bankId !== undefined ? `[data-gap="${selected}"]` : null;
   const item = round[index]; title('Fill the gaps');
-  main.innerHTML = playScreen({ item, index, total: round.length, gaps, letters, selected, solved, message, incorrect });
-  main.querySelectorAll('[data-gap]').forEach(b => b.onclick = () => { selected = Number(b.dataset.gap); renderPlay(); });
-  main.querySelectorAll('[data-letter]').forEach(b => b.onclick = () => enterLetter(b.dataset.letter));
+  main.innerHTML = playScreen({ item, index, total: round.length, gaps, letters, selected, solved, message, incorrect, letterBank, placements });
+  main.querySelectorAll('[data-gap]').forEach(b => b.onclick = () => {
+    if (solved) return;
+    selected = Number(b.dataset.gap);
+    delete placements[selected];
+    delete letters[selected];
+    incorrect = incorrect.filter(g => g !== selected);
+    message = '';
+    renderPlay();
+  });
+  main.querySelectorAll('[data-bank-id]').forEach(b => b.onclick = () => enterTile(Number(b.dataset.bankId)));
   if (solved) document.querySelector('#next').onclick = nextWord;
-  else { document.querySelector('#backspace').onclick = erase; document.querySelector('#reveal').onclick = reveal; }
+  else document.querySelector('#reveal').onclick = reveal;
   if (solved) document.querySelector('#next').focus({ preventScroll: true });
   else if (focusSelector) main.querySelector(focusSelector)?.focus({ preventScroll: true });
 }
-function enterLetter(letter) {
+function enterTile(tileId) {
   if (phase !== 'play' || solved) return;
-  letters[selected] = letter; message = '';
+  const next = placeTile(letterBank, placements, selected, tileId);
+  if (next === placements) return;
+  placements = next;
+  letters = lettersForPlacements(letterBank, placements); message = '';
   incorrect = incorrect.filter(g => g !== selected);
   const needsLetter = g => !letters[g] || incorrect.includes(g);
   const later = gaps.find(g => g > selected && needsLetter(g));
@@ -100,6 +115,7 @@ function enterLetter(letter) {
 function erase() {
   if (phase !== 'play' || solved) return;
   if (!letters[selected]) selected = [...gaps].reverse().find(g => g < selected) ?? selected;
+  delete placements[selected];
   delete letters[selected]; incorrect = incorrect.filter(g => g !== selected); message = ''; renderPlay();
 }
 function check() {
@@ -120,7 +136,7 @@ function reveal() {
   helped = true; phase = 'reveal';
   const item = round[index];
   main.innerHTML = revealScreen({ item });
-  document.querySelector('#try-again').onclick = () => { phase = 'play'; letters = {}; incorrect = []; selected = gaps[0]; message = ''; renderPlay(); };
+  document.querySelector('#try-again').onclick = () => { phase = 'play'; placements = {}; letters = {}; incorrect = []; selected = gaps[0]; message = ''; renderPlay(); };
 }
 function nextWord() { index++; if (index < round.length) beginWord(); else finish(); }
 function finish() {
@@ -136,7 +152,11 @@ window.addEventListener('hashchange', route);
 document.addEventListener('keydown', event => {
   if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest('a')) return;
   if (phase !== 'play') return;
-  if (/^[a-z]$/i.test(event.key)) { event.preventDefault(); enterLetter(event.key.toLowerCase()); }
+  if (/^[a-z]$/i.test(event.key)) {
+    event.preventDefault();
+    const tile = availableTiles(letterBank, placements).find(tile => tile.letter === event.key.toLowerCase());
+    if (tile) enterTile(tile.id);
+  }
   else if (event.key === 'Backspace') { event.preventDefault(); erase(); }
   else if (event.key === 'Enter' && solved && !event.target.closest('button')) { event.preventDefault(); nextWord(); }
 });

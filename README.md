@@ -4,6 +4,8 @@ A mobile spelling game built with plain HTML, CSS, and JavaScript modules. No fr
 
 Answers check automatically when every gap is filled. Correct words get a short confetti celebration; incorrect letters stay visible with a red wobble and can be replaced directly. Reduced-motion preferences disable the animations.
 
+Each word has a shuffled letter bank containing its missing letters plus 3–4 extras. Duplicate letters have separate tiles. Using a letter hides its tile; tapping a filled gap returns it to the bank. Replacing an incorrect letter also returns the previous tile. Physical keyboard input uses the same available letters, and Backspace returns a tile. “Show word” clears the gaps and restores the full bank when you try again.
+
 The app opens with English, Maths, Science, Computer, and French. Science has two chapters: Living Things (the original ten words) and Energy (ten words, including “electrical energy”). The other subjects show a friendly empty page until chapters are added. Phrases keep their word spacing, with each word on its own row during play; only letters become gaps.
 
 ## Run
@@ -21,6 +23,7 @@ src/
   app.js                Screen navigation, game state, and event handling
   data/lessons.js        Subjects, chapters, word collections, and clues
   game/spelling.js      Gap selection, difficulty, and round selection
+  game/letter-bank.js   Shuffled letter choices and token availability
   screens/
     subjects.js         Subject selection and empty/collection pages
     chapters.js         Chapter navigation and collection pages
