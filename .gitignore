@@ -1,0 +1,28 @@
+# Generated hosting output
+dist/
+
+# Dependencies and caches
+node_modules/
+.cache/
+coverage/
+__pycache__/
+*.py[cod]
+
+# Local secrets (keep a shareable example if one is added)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
