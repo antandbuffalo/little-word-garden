@@ -8,6 +8,8 @@ Each word has a shuffled letter bank containing its missing letters plus 3–4 e
 
 The app opens with English, Maths, Science, Computer, and French. Science has two chapters: Living Things (the original ten words) and Energy (ten words, including “electrical energy”). The other subjects show a friendly empty page until chapters are added. Phrases keep their word spacing, with each word on its own row during play; only letters become gaps.
 
+Each chapter collection has four levels: one, two, three, then roughly half its letters missing. Short words always keep a visible letter, and Level 4 never hides fewer letters than Level 3. Finish all ten words without help at the current level to unlock the next. Rounds contain up to five words, favouring unattempted words before returning to tricky ones. Mistakes or hints require another independent attempt; they never remove earned mastery. Earlier levels remain replayable. Existing wins and round counts are preserved, while the new level tracking starts at Level 1 because old results did not record levels.
+
 ## Run
 
 From this directory, run `npm run dev` and open http://localhost:5173. Python 3 runs the static server; npm is just a shortcut. You can also use any static HTTP server. JavaScript modules require HTTP rather than opening the HTML file directly.
@@ -24,10 +26,12 @@ src/
   data/lessons.js        Subjects, chapters, word collections, and clues
   game/spelling.js      Gap selection, difficulty, and round selection
   game/letter-bank.js   Shuffled letter choices and token availability
+  game/levels.js        Level mastery, unlocking, and five-word round selection
   screens/
     subjects.js         Subject selection and empty/collection pages
     chapters.js         Chapter navigation and collection pages
     home.js             Welcome and lesson overview
+    levels.js           Level selection and progress
     play.js             Missing-letter game
     reveal.js           Show the word and try again
     summary.js          Round results and tricky-word practice

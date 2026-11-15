@@ -20,9 +20,9 @@ test('all school words rotate letter gaps and keep readable letters at each leve
   for (const { word } of allWords) {
     const letterCount = word.replace(/[^a-z]/g, '').length;
     let previous = [];
-    for (let wins = 0; wins < 16; wins++) {
-      const gaps = makeGaps(word, wins, previous);
-      assert.equal(gaps.length, Math.min(1 + Math.floor(wins / 2), Math.ceil(letterCount / 2)));
+    for (let level = 1; level <= 4; level++) {
+      const gaps = makeGaps(word, level, previous);
+      assert.equal(gaps.length, Math.min(level === 4 ? Math.max(3, Math.ceil(letterCount / 2)) : level, letterCount - 1));
       assert.equal(new Set(gaps).size, gaps.length);
       assert.ok(gaps.every(i => i >= 0 && i < word.length));
       assert.ok(gaps.every(i => /[a-z]/.test(word[i])));
@@ -34,7 +34,7 @@ test('all school words rotate letter gaps and keep readable letters at each leve
 
 test('Electrical energy keeps its space and checks letters across both words', () => {
   const word = 'electrical energy';
-  const gaps = makeGaps(word, 20);
+  const gaps = makeGaps(word, 4);
   assert.ok(!gaps.includes(10));
   const letters = Object.fromEntries(gaps.map(index => [index, word[index]]));
   assert.equal(assessAttempt(word, gaps, letters).status, 'correct');

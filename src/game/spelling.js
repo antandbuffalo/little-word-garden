@@ -3,9 +3,10 @@ export function shuffle(items, random = Math.random) {
   for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; }
   return result;
 }
-export function makeGaps(word, successes = 0, previous = []) {
+export function makeGaps(word, level = 1, previous = []) {
   const positions = Array.from({ length: word.length }, (_, i) => i).filter(i => /[a-z]/i.test(word[i]));
-  const count = Math.min(1 + Math.floor(successes / 2), Math.ceil(positions.length / 2));
+  // Keep at least one letter visible, even in a short word at Level 3.
+  const count = Math.min(level === 4 ? Math.max(3, Math.ceil(positions.length / 2)) : level, Math.max(1, positions.length - 1));
   let gaps = shuffle(positions).slice(0, count).sort((a, b) => a - b);
   if (gaps.join() === previous.join()) {
     const replacement = positions.find(i => !gaps.includes(i));

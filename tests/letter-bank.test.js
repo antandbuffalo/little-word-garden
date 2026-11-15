@@ -16,8 +16,8 @@ test('bank has one token per missing letter, including duplicates, plus 3–4 ex
 
 test('every chapter word and phrase can be completed using its bank', () => {
   for (const { word } of lessons.flatMap(lesson => lesson.words)) {
-    for (const wins of [0, 4, 16]) {
-      const gaps = makeGaps(word, wins);
+    for (const level of [1, 2, 3, 4]) {
+      const gaps = makeGaps(word, level);
       const bank = createLetterBank(word, gaps);
       let placements = {};
       for (const gap of gaps) {

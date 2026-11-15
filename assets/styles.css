@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;650;700&family=Fraunces:ital,wght@0,500;0,600;1,500&display=swap');
 
+.level-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 25px 0; text-align: left; }
+.level-card { padding: 15px 12px; min-height: 112px; border: 1px solid #dedbcf; border-radius: 15px; background: #fffdf9; color: #425d44; text-align: left; }
+.level-card.chosen { border: 2px solid #8a739f; background: #f1eaf6; padding: 14px 11px; box-shadow: 0 3px 0 #d7c9e1; }
+.level-card:disabled { color: #7e8278; background: #eeece5; }
+.level-card-title { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; }
+.level-description { display: block; font-size: 11px; margin: 9px 0; line-height: 1.5; }
+.level-progress { display: block; font-size: 9px; line-height: 1.5; color: #787e70; }
+.level-summary { background: #edf1e4; border-radius: 15px; padding: 17px; margin-top: 24px; color: #425d44; font-size: 14px; }
+.level-summary p { font-size: 12px; line-height: 1.7; margin: 8px 0 0; }
+
 /* Phrases keep each word together on its own row on a phone. */
 .tiles.phrase { flex-direction: column; gap: 12px; }
 .word-tiles { display: flex; justify-content: center; gap: 5px; width: 100%; }

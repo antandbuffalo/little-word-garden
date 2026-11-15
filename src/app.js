@@ -1,5 +1,6 @@
 import { getLesson, getSubject, getChapter, getSubjectChapters, getChapterLessons, subjects, chapters, lessons } from './data/lessons.js';
-import { makeGaps, chooseRound, shuffle, assessAttempt } from './game/spelling.js';
+import { makeGaps, shuffle, assessAttempt } from './game/spelling.js';
+import { chooseLevelRound, levelStatus, unlockedLevel, recordLevelAttempt } from './game/levels.js';
 import { createLetterBank, availableTiles, placeTile, lettersForPlacements } from './game/letter-bank.js';
 import { createProgressStore } from './storage/progress.js';
 import { homeScreen } from './screens/home.js';
@@ -17,6 +18,7 @@ let store = createProgressStore(lesson.id);
 let saved = store.load();
 let progress = saved.progress;
 let rounds = saved.rounds;
+let currentLevel = unlockedLevel(lesson.words, progress);
 let round = [], index = 0, gaps = [], letters = {}, selected = 0, phase = 'home', helped = false, solved = false, results = [], previousRound = [], message = '';
 let storageAvailable = true;
 let incorrect = [];
@@ -27,7 +29,13 @@ function home() {
   const chapter = getChapter(lesson.chapterId);
   const subject = getSubject(chapter.subjectId);
   phase = 'home'; homeButton.hidden = false; title(chapter.title);
-  main.innerHTML = chapterNavigation(subject, chapter) + homeScreen({ lesson, chapter, progress, rounds });
+  main.innerHTML = chapterNavigation(subject, chapter) + homeScreen({ lesson, chapter, progress, rounds, currentLevel });
+  main.querySelectorAll('[data-level]').forEach(button => button.onclick = () => {
+    const level = Number(button.dataset.level);
+    if (level > unlockedLevel(lesson.words, progress)) return;
+    currentLevel = level;
+    home();
+  });
   document.querySelector('#start').onclick = () => startRound();
 }
 
@@ -37,6 +45,7 @@ function openLesson(nextLesson) {
   saved = store.load();
   progress = saved.progress;
   rounds = saved.rounds;
+  currentLevel = unlockedLevel(lesson.words, progress);
   previousRound = [];
   home();
 }
@@ -68,12 +77,12 @@ function route() {
   window.scrollTo(0, 0);
 }
 function startRound(words) {
-  round = words || chooseRound(lesson.words, progress, previousRound); previousRound = round.map(w => w.word); index = 0; results = []; homeButton.hidden = false; beginWord();
+  round = words || chooseLevelRound(lesson.words, progress, currentLevel, previousRound); previousRound = round.map(w => w.word); index = 0; results = []; homeButton.hidden = false; beginWord();
 }
 function beginWord() {
   const item = round[index];
   const record = progress[item.word] || {};
-  gaps = makeGaps(item.word, record.wins || 0, record.gaps || []);
+  gaps = makeGaps(item.word, currentLevel, record.gaps || []);
   letterBank = createLetterBank(item.word, gaps);
   placements = {};
   progress[item.word] = { ...record, gaps }; persist();
@@ -83,7 +92,7 @@ function renderPlay() {
   const active = document.activeElement;
   const focusSelector = active?.dataset.gap !== undefined ? `[data-gap="${active.dataset.gap}"]` : active?.dataset.bankId !== undefined ? `[data-gap="${selected}"]` : null;
   const item = round[index]; title('Fill the gaps');
-  main.innerHTML = playScreen({ item, index, total: round.length, gaps, letters, selected, solved, message, incorrect, letterBank, placements });
+  main.innerHTML = playScreen({ item, index, total: round.length, gaps, letters, selected, solved, message, incorrect, letterBank, placements, currentLevel });
   main.querySelectorAll('[data-gap]').forEach(b => b.onclick = () => {
     if (solved) return;
     selected = Number(b.dataset.gap);
@@ -127,6 +136,7 @@ function check() {
   if (attempt.status === 'correct') {
     solved = true; message = helped ? 'Lovely practice! You finished the word. ✿' : 'Wonderful! You found every missing letter. ✿';
     if (!helped) progress[item.word].wins = (progress[item.word].wins || 0) + 1;
+    progress = recordLevelAttempt(progress, item.word, currentLevel, helped);
     results.push({ ...item, helped }); persist();
   } else {
     helped = true; selected = incorrect[0]; message = 'Almost! Try another letter in the red gaps. You can do it.';
@@ -142,7 +152,10 @@ function nextWord() { index++; if (index < round.length) beginWord(); else finis
 function finish() {
   phase = 'summary'; rounds++; persist(); title('Your garden is growing');
   const tricky = results.filter(r => r.helped);
-  main.innerHTML = summaryScreen({ total: round.length, results, tricky, storageAvailable });
+  const status = levelStatus(lesson.words, progress, currentLevel);
+  main.innerHTML = summaryScreen({ total: round.length, results, tricky, storageAvailable, currentLevel, status });
+  const nextLevel = document.querySelector('#next-level');
+  if (nextLevel) nextLevel.onclick = () => { currentLevel++; previousRound = []; startRound(); };
   document.querySelector('#another').onclick = () => startRound();
   if (tricky.length) document.querySelector('#practice').onclick = () => startRound(shuffle(tricky));
   document.querySelector('#back-home').onclick = home;
