@@ -133,3 +133,4 @@
 .bank-letter:active { transform: translateY(2px); border-bottom-width: 2px; }
 .bank-letter.used { visibility: hidden; }
 .bank-hint { color: #797e73; font-size: 11px; line-height: 1.7; text-align: center; margin: 20px 0 0; }
+.admin-link { display: block; padding: 14px; color: #64785b; font-size: 11px; }

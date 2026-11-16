@@ -22,10 +22,14 @@ To try it on a phone connected to the same Wi-Fi, open `http://<your-computer-LA
 
 ```text
 index.html              Shared page shell and entry point
+admin.html              Parent-only content entry and GitHub publishing page
 assets/styles.css       Responsive styles
+assets/admin.css        Admin form and review layouts
 src/
   app.js                Screen navigation, game state, and event handling
-  data/lessons.js        Subjects, chapters, word collections, and clues
+  admin/                Bulk entry, GitHub API client, and saved token handling
+  data/lessons.js        Fixed subjects and catalog lookup helpers
+  data/catalog.js        Editable chapters, word collections, and clues
   game/spelling.js      Gap selection, difficulty, and round selection
   game/letter-bank.js   Shuffled letter choices and token availability
   game/levels.js        Level mastery, unlocking, and five-word round selection
@@ -44,7 +48,7 @@ scripts/package.mjs     Optional copy step for static hosting
 
 ## Add lessons, subjects, or screens
 
-Add a subject to `subjects` in `src/data/lessons.js`, then add chapters to `chapters` with a stable `id`, `subjectId`, `title`, and `icon`. Add word collections to `lessons`, referencing their chapter with `chapterId`. Each collection has a stable `id`, `title`, and `words`. Each word has `word`, `clue`, and `icon` fields. Use lowercase alphabetic words or space-separated phrases with at least two letters for this game. Keep IDs stable so saved progress stays attached to the same collection.
+Subjects are fixed in `src/data/lessons.js`. Use the admin page below to add chapters and words, or edit `src/data/catalog.js` directly. That module must retain its header and `export default` followed by a JSON object and a semicolon; the admin reads it as data without executing downloaded code. Chapters have a stable `id`, `subjectId`, `title`, and `icon`. Word collections in `lessons` reference their chapter with `chapterId` and have a stable `id`, `title`, and `words`. Each word has `word`, `clue`, and an optional `icon`. Use lowercase alphabetic words or space-separated phrases with at least two letters for this game. Keep IDs stable so saved progress stays attached to the same collection.
 
 The subject picker reads this catalog automatically. Every subject opens its chapter list, even when there is only one chapter. A chapter with one nonempty word collection opens its spelling overview; several collections show a collection picker. Subjects without chapters and chapters without words show empty states. Adding content requires no changes to the game logic.
 
@@ -54,8 +58,27 @@ The default lesson retains progress saved by the original app. Other lesson IDs 
 
 ## Checks and hosting
 
+The repository is hosted on GitHub at `antandbuffalo/little-word-garden`, and the live app is already deployed using GitHub Pages (confirmed by the owner). Content publishing commits through the GitHub API for the existing automatic Pages deployment. The owner has asked to use the existing hosting setup without re-verifying it. Do not switch hosting providers.
+
 Run `npm test` for game and storage checks. Node.js is needed for tests and the optional hosting copy step, not for the browser app itself.
 
-Run `npm run package` to copy `index.html`, `assets/`, and `src/` into `dist/` for static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The existing Sites manifest points to that deployment folder.
+Run `npm run package` to copy `index.html`, `admin.html`, `assets/`, and `src/` into `dist/` for static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
 
 Typography uses Google Fonts with local fallbacks.
+
+## Admin page
+
+Open `admin.html` or the **Add words · for grown-ups** footer link. No server or GitHub sign-in integration is needed; repository write access is authenticated by the token you enter.
+
+1. Create a fine-grained GitHub personal access token restricted to this repository, with **Contents: Read and write**, and enter it in the admin page. **Connect & save token** saves it in localStorage under `little-word-garden-admin-token` and loads the latest content from the repository's default branch. After reopening the page, connect again to load content using the saved token.
+2. Choose a subject and select or create a chapter. Existing collections are preserved; if a chapter has several collections, select one. New or empty chapters receive a default word collection.
+3. Paste one `clue | word` pair per line, or two spreadsheet columns with clues first. No icons are requested or added for words. Existing icons remain intact. For example:
+
+   ```text
+   A pet that purrs. | cat
+   The star that warms the Earth. | sun
+   ```
+
+4. **Review words** validates words and phrases, rejects duplicate entries, and previews the additions. **Publish words** commits only `src/data/catalog.js` through GitHub's Contents API. It uses the loaded file SHA to avoid overwriting concurrent edits. The success message links to the commit; Pages updates after the existing deployment finishes. On a conflict or uncertain network result, reconnect and review again; the typed draft is kept.
+
+The token stays in this browser until **Clear token** is used. Clearing it also disconnects the admin without changing spelling progress. If browser storage is blocked, the page can still publish using the in-memory token and explains that it could not save it. Use a personal device: scripts on the same origin can access localStorage. Never embed tokens in source or commits. Editing and deleting existing content are outside this version's scope.

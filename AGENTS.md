@@ -20,7 +20,9 @@ The current activity is filling missing letters, supported by a clue. Audio dict
 
 ## Where changes belong
 
-- `src/data/lessons.js`: subjects, chapters, word collections, and lookup helpers. Content belongs here rather than in the game controller.
+- `src/data/lessons.js`: fixed subjects, re-exported catalog arrays, and lookup helpers.
+- `src/data/catalog.js`: editable chapters and word collections. Keep its exact header and JSON-after-`export default` format for the admin parser; never evaluate source loaded from GitHub. Preserve IDs and existing words when editing.
+- `admin.html`, `src/admin/`, `assets/admin.css`: parent content entry, bulk validation, GitHub API publishing, and saved token controls.
 - `src/app.js`: navigation, active game state, DOM events, and saving progress.
 - `src/game/spelling.js`: gap generation, shuffling, round selection, and answer checking.
 - `src/game/letter-bank.js`: bank generation and tracking individual letter tokens.
@@ -41,7 +43,7 @@ Subjects: English, Maths, Science, Computer, French. Only Science currently has 
 
 Other subjects show friendly empty states. Do not invent school content just to fill them.
 
-Subjects have stable `id` values; chapters reference `subjectId`; collections reference `chapterId`. Word entries contain lowercase `word`, `clue`, and `icon`. Phrases are supported: only alphabetic positions become gaps, spaces stay intact, and each word in a phrase has its own tile row. The current input bank supports English a–z; adding actual French vocabulary with accents will require extending character handling and tests.
+Subjects have stable `id` values; chapters reference `subjectId`; collections reference `chapterId`. Word entries contain lowercase `word`, `clue`, and an optional `icon`. Existing icons are retained; admin additions do not require icons. Render entered clues and chapter titles as escaped text. Phrases are supported: only alphabetic positions become gaps, spaces stay intact, and each word in a phrase has its own tile row. The current input bank supports English a–z; adding actual French vocabulary with accents will require extending character handling and tests.
 
 Navigation uses static-host-friendly hashes: `#subjects`, `#subject/science`, `#chapter/living-things`, `#chapter/energy`, and `#lesson/<collection-id>`. Preserve reloads, deep links, and browser Back behavior when changing navigation.
 
@@ -75,6 +77,16 @@ Keep collection IDs and word keys stable to preserve saved progress. Old wins an
 
 Run `npm test` for behavior changes and `npm run package` when changing website source or packaging. Verify the affected navigation and interaction flow; pay particular attention to duplicate tokens, phrases, retries, level unlocking, replay, and persistence when applicable. Check mobile layout in a browser when available; rendering tests alone do not verify visual appearance. Report any verification limits honestly.
 
-The optional Sites manifest is `.openai/hosting.json`. It points to `dist/`. Previous publishing and browser-preview attempts were blocked by the execution environment; a manifest or successful packaging command is not evidence of a live deployment. Keep hosting identity intact and consult the applicable Sites workflow if publishing is requested.
+The repository is on GitHub at `antandbuffalo/little-word-garden`; the owner confirmed the live app is already deployed on GitHub Pages. Content publishing commits via the GitHub API for the existing automatic Pages deployment. Use that setup without re-verifying hosting, as requested by the owner. Do not switch hosting providers.
+
+The optional Sites manifest is `.openai/hosting.json`. It points to `dist/` and is not the confirmed live hosting provider. Previous Sites publishing and browser-preview attempts were blocked by the execution environment; a manifest or successful packaging command is not evidence of a live deployment. Keep hosting identity intact and consult the applicable Sites workflow if Sites publishing is requested.
+
+## Admin page
+
+`admin.html` is linked from the game footer. Subjects are fixed. The owner can select or create a chapter, select an existing collection when needed, and add several words at once as `clue | word` lines or tab-separated spreadsheet rows (clues first). No word icon field is required. New/empty chapters get a default collection. Review validates additions and rejects duplicate spellings in the selected collection. Existing content, IDs, and game progress remain intact. Editing/deleting existing content is outside this version's scope.
+
+The owner explicitly requested saving a manually entered GitHub personal access token in localStorage. Store it under `little-word-garden-admin-token`, restore the masked input on reopening, and provide **Clear token** to delete it and disconnect. Do not clear game progress. If storage fails, fall back to memory and report the limitation. Never embed tokens in source, commits, URLs, logs, or errors. Explain in the UI that the token is saved on this device.
+
+Use a fine-grained token restricted to this repository with Contents read/write permission. Connect loads the latest catalog and file SHA from the repository default branch. Publish writes only `src/data/catalog.js` through GitHub's Contents API using that SHA; conflicts and uncertain outcomes require reconnecting and reviewing again while retaining the typed draft. Preview invalidates when the form changes. Success links to the commit and explains that Pages deployment takes time; it does not claim deployment was observed. Packaging includes `admin.html`.
 
 Update this file and the README when product behavior, commands, content organization, or storage contracts change. Commit or push when the user asks; do not assume a code-change request also requests a commit or push.

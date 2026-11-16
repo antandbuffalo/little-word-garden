@@ -1,3 +1,4 @@
+import { escapeHTML } from './html.js';
 export function subjectsScreen({ subjects, chapters, lessons }) {
   return `
     <section class="subjects-page">
@@ -43,9 +44,9 @@ export function subjectScreen({ subject, chapters, lessons }) {
           ${chapters.map(chapter => {
             const count = lessons.filter(lesson => lesson.chapterId === chapter.id)
               .reduce((total, lesson) => total + lesson.words.length, 0);
-            return `<a class="subject-card" href="#chapter/${chapter.id}">
-            <span class="subject-icon" aria-hidden="true">${chapter.icon}</span>
-            <span class="subject-copy"><span class="subject-title">${chapter.title}</span>
+            return `<a class="subject-card" href="#chapter/${escapeHTML(chapter.id)}">
+            <span class="subject-icon" aria-hidden="true">${escapeHTML(chapter.icon)}</span>
+            <span class="subject-copy"><span class="subject-title">${escapeHTML(chapter.title)}</span>
             <span class="subject-description">${count ? `${count} words to discover` : 'Words coming soon'}</span></span>
             <span class="subject-arrow" aria-hidden="true">→</span>
           </a>`; }).join('')}

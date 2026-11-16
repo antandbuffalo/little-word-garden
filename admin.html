@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#faf7f2">
+  <title>Add words · Little Word Garden</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/admin.css">
+  <script type="module" src="src/admin/app.js"></script>
+</head>
+<body>
+  <div class="app admin-app">
+    <header><a class="brand" href="index.html#subjects"><span class="brand-icon">✿</span><span>word garden<small>A LITTLE PRACTICE. A LOT OF GROWING.</small></span></a><a class="admin-back" href="index.html#subjects">Back to game</a></header>
+    <main>
+      <div class="admin-heading"><span class="badge">FOR GROWN-UPS</span><h1>Grow the word garden.</h1><p class="intro">Choose a chapter, add clues and words, then publish.</p></div>
+
+      <section class="admin-panel" aria-labelledby="token-heading">
+        <h2 id="token-heading">1. Connect to GitHub</h2>
+        <form id="token-form">
+          <fieldset id="token-fields">
+            <label for="token">Personal access token</label>
+            <input id="token" type="password" autocomplete="off" spellcheck="false" autocapitalize="off" required aria-describedby="token-note">
+            <p id="token-note" class="admin-note">Saved in this browser until you clear it. Use a personal device.</p>
+            <div class="admin-actions"><button class="secondary" type="submit">Connect &amp; save token</button><button class="secondary" id="clear-token" type="button">Clear token</button></div>
+          </fieldset>
+        </form>
+        <details><summary>Which token should I use?</summary><p class="admin-note">Create a fine-grained GitHub token for <strong>antandbuffalo/little-word-garden</strong> with <strong>Contents: Read and write</strong>. Choose an expiration date. The token is sent only to GitHub and saved in localStorage on this device.</p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create a GitHub token ↗</a></details>
+        <p id="connection-status" class="admin-status" role="status"></p>
+      </section>
+
+      <form id="words-form" class="admin-panel">
+        <fieldset id="editor-fields" disabled>
+          <h2>2. Choose a chapter</h2>
+          <label for="subject">Subject</label><select id="subject" required></select>
+          <label for="chapter">Chapter</label><select id="chapter" required></select>
+          <div id="new-chapter" hidden><label for="chapter-title">New chapter name</label><input id="chapter-title" maxlength="100" placeholder="For example, Plants around us"></div>
+          <div id="collection-field" hidden><label for="collection">Word collection</label><select id="collection"></select></div>
+
+          <h2 class="admin-step">3. Add clues, then words</h2>
+          <label for="words">One clue and word per line</label>
+          <p id="bulk-help" class="admin-note">Separate each clue and word with a | character. You can also paste two columns from a spreadsheet, with clues first. Phrases are welcome.</p>
+          <textarea id="words" rows="7" required spellcheck="true" aria-describedby="bulk-help" placeholder="A pet that purrs. | cat&#10;The star that warms the Earth. | sun"></textarea>
+          <button class="secondary" type="submit">Review words</button>
+
+          <section id="preview" class="admin-preview" hidden aria-labelledby="preview-heading">
+            <h2 id="preview-heading" tabindex="-1">4. Ready to publish?</h2>
+            <p id="preview-summary" class="admin-note"></p>
+            <div class="admin-table-wrap"><table><thead><tr><th scope="col">Clue</th><th scope="col">Word</th></tr></thead><tbody id="preview-rows"></tbody></table></div>
+            <p class="admin-note">Publish creates one commit on GitHub. Your Pages site will update after deployment finishes.</p>
+            <button class="primary" id="publish" type="button">Publish words <span>↑</span></button>
+          </section>
+        </fieldset>
+        <p id="publish-status" class="admin-status" role="status"></p>
+      </form>
+    </main>
+    <footer>New words. New discoveries. <span>✿</span></footer>
+  </div>
+</body>
+</html>
