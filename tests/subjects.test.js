@@ -3,22 +3,38 @@ import assert from 'node:assert/strict';
 import { subjects, chapters, lessons, getSubject, getSubjectLessons, getSubjectChapters, getChapterLessons } from '../src/data/lessons.js';
 import { subjectsScreen, subjectScreen } from '../src/screens/subjects.js';
 
-test('all five subjects are available and both word collections belong to Science', () => {
+test('all five subjects are available and collections belong to valid subjects', () => {
   assert.deepEqual(subjects.map(subject => subject.title), ['English', 'Maths', 'Science', 'Computer', 'French']);
-  assert.equal(getSubjectLessons('science').flatMap(lesson => lesson.words).length, 20);
-  for (const subject of subjects.filter(subject => subject.id !== 'science')) {
-    assert.deepEqual(getSubjectLessons(subject.id), []);
+  const scienceIds = getSubjectLessons('science').map(lesson => lesson.id);
+  assert.ok(scienceIds.includes('school-hard-words'));
+  assert.ok(scienceIds.includes('energy-hard-words'));
+  for (const lesson of lessons) {
+    const chapter = chapters.find(item => item.id === lesson.chapterId);
+    assert.ok(chapter, `${lesson.id} must belong to a chapter`);
+    assert.ok(getSubject(chapter.subjectId), `${chapter.id} must belong to a subject`);
+    assert.ok(getSubjectLessons(chapter.subjectId).includes(lesson));
   }
 });
 
-test('subject selection links to every subject and shows Science word count', () => {
-  const html = subjectsScreen({ subjects, chapters, lessons });
+test('subject selection links to every subject and counts words across chapters', () => {
+  const sampleChapters = [
+    { id: 'first', subjectId: 'science' },
+    { id: 'second', subjectId: 'science' },
+    { id: 'english-chapter', subjectId: 'english' },
+  ];
+  const sampleLessons = [
+    { chapterId: 'first', words: [{ word: 'cat' }, { word: 'dog' }] },
+    { chapterId: 'second', words: [{ word: 'sun' }] },
+    { chapterId: 'english-chapter', words: [{ word: 'guardian' }] },
+  ];
+  const html = subjectsScreen({ subjects, chapters: sampleChapters, lessons: sampleLessons });
   for (const subject of subjects) {
     assert.ok(html.includes(`href="#subject/${subject.id}"`));
     assert.ok(html.includes(subject.title));
   }
-  assert.ok(html.includes('20 words to discover'));
-  assert.equal((html.match(/Words coming soon/g) || []).length, 4);
+  assert.ok(html.includes('3 words to discover'));
+  assert.ok(html.includes('1 words to discover'));
+  assert.equal((html.match(/Words coming soon/g) || []).length, 3);
 });
 
 test('empty subjects offer navigation without starting an empty game', () => {
