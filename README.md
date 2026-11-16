@@ -2,6 +2,8 @@
 
 A mobile spelling game built with plain HTML, CSS, and JavaScript modules. No framework, dependencies, or build step is needed to run it.
 
+For future coding agents, [AGENTS.md](AGENTS.md) documents the product context, implementation map, interaction rules, level progression, storage compatibility, and verification workflow.
+
 Answers check automatically when every gap is filled. Correct words get a short confetti celebration; incorrect letters stay visible with a red wobble and can be replaced directly. Reduced-motion preferences disable the animations.
 
 Each word has a shuffled letter bank containing its missing letters plus 3–4 extras. Duplicate letters have separate tiles. Using a letter hides its tile; tapping a filled gap returns it to the bank. Replacing an incorrect letter also returns the previous tile. Physical keyboard input uses the same available letters, and Backspace returns a tile. “Show word” clears the gaps and restores the full bank when you try again.
