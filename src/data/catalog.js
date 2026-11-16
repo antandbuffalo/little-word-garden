@@ -12,6 +12,12 @@ export default {
       "subjectId": "science",
       "title": "Energy",
       "icon": "⚡"
+    },
+    {
+      "id": "general",
+      "subjectId": "english",
+      "title": "General",
+      "icon": "📚"
     }
   ],
   "lessons": [
@@ -126,6 +132,17 @@ export default {
           "word": "prey",
           "clue": "Animals that are hunted by other animals for food.",
           "icon": "🐁"
+        }
+      ]
+    },
+    {
+      "id": "general-words",
+      "chapterId": "general",
+      "title": "General word collection",
+      "words": [
+        {
+          "word": "guardian",
+          "clue": "person to take care of their child"
         }
       ]
     }
