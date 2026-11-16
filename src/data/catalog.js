@@ -18,6 +18,12 @@ export default {
       "subjectId": "english",
       "title": "General",
       "icon": "📚"
+    },
+    {
+      "id": "going-places",
+      "subjectId": "english",
+      "title": "Going Places",
+      "icon": "🧭"
     }
   ],
   "lessons": [
@@ -143,6 +149,77 @@ export default {
         {
           "word": "guardian",
           "clue": "person to take care of their child"
+        }
+      ]
+    },
+    {
+      "id": "going-places-words",
+      "chapterId": "going-places",
+      "title": "Going Places word collection",
+      "words": [
+        {
+          "word": "colombia",
+          "clue": "A country in South America whose name starts with C."
+        },
+        {
+          "word": "canyon",
+          "clue": "A deep valley with steep sides, often carved by a river."
+        },
+        {
+          "word": "nervous",
+          "clue": "Feeling worried or a little afraid about what might happen."
+        },
+        {
+          "word": "splash",
+          "clue": "The sound and spray when you jump into water."
+        },
+        {
+          "word": "arid",
+          "clue": "Very dry, with little or no rain."
+        },
+        {
+          "word": "granite",
+          "clue": "A hard rock with small specks, often used in buildings."
+        },
+        {
+          "word": "meadow",
+          "clue": "A field of grass, often filled with wildflowers."
+        },
+        {
+          "word": "horizon",
+          "clue": "The faraway line where the land or sea seems to meet the sky."
+        },
+        {
+          "word": "rabin",
+          "clue": "A person's name that starts with R and ends with N."
+        },
+        {
+          "word": "desert",
+          "clue": "A very dry place where little rain falls and few plants grow."
+        }
+      ]
+    },
+    {
+      "id": "going-places-synonyms",
+      "chapterId": "going-places",
+      "title": "Words & Meanings",
+      "activity": "meanings",
+      "words": [
+        {
+          "word": "skipped off",
+          "clue": "To move quickly or secretly."
+        },
+        {
+          "word": "arid",
+          "clue": "Dry."
+        },
+        {
+          "word": "parched",
+          "clue": "Dried out due to heat."
+        },
+        {
+          "word": "leap over",
+          "clue": "To move with a large jump."
         }
       ]
     }

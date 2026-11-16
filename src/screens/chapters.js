@@ -16,7 +16,7 @@ export function chapterScreen({ subject, chapter, lessons }) {
       <div class="subject-list">
         ${lessons.map(lesson => `<a class="subject-card" href="#lesson/${escapeHTML(lesson.id)}">
           <span class="subject-copy"><span class="subject-title">${escapeHTML(lesson.title)}</span>
-          <span class="subject-description">${lesson.words.length} words to discover</span></span>
+          <span class="subject-description">${lesson.words.length} ${lesson.activity === 'meanings' ? 'word–meaning pairs · Learn and practise' : 'words to discover'}</span></span>
           <span class="subject-arrow" aria-hidden="true">→</span>
         </a>`).join('')}
       </div>

@@ -6,7 +6,7 @@ Read this file and [README.md](README.md) before making changes. This file descr
 
 A spelling practice web app for the user's seven-year-old daughter, used independently on a mobile phone. The user supplies hard words from school lessons. Keep interactions simple, touch targets large, instructions short, and feedback encouraging.
 
-The current activity is filling missing letters, supported by a clue. Audio dictation was deliberately left out of this version. There are no timers, lives, leaderboards, accounts, or server-side storage.
+Spelling collections use missing letters supported by a clue. Collections with `activity: "meanings"` show full word–meaning pairs in a Learn view followed by choosing the meaning. Audio dictation was deliberately left out of this version. There are no timers, lives, leaderboards, accounts, or server-side storage.
 
 ## Repository and stack
 
@@ -23,7 +23,8 @@ The current activity is filling missing letters, supported by a clue. Audio dict
 - `src/data/lessons.js`: fixed subjects, re-exported catalog arrays, and lookup helpers.
 - `src/data/catalog.js`: editable chapters and word collections. Keep its exact header and JSON-after-`export default` format for the admin parser; never evaluate source loaded from GitHub. Preserve IDs and existing words when editing.
 - `admin.html`, `src/admin/`, `assets/admin.css`: parent content entry, card validation, GitHub API publishing, and saved token controls.
-- `src/app.js`: navigation, active game state, DOM events, and saving progress.
+- `src/app.js`: navigation, active spelling state, DOM events, and saving progress.
+- `src/meanings.js`, `src/game/meanings.js`, `src/screens/meanings.js`: meaning activity state/events, choices/mastery, and Learn/practice/summary rendering.
 - `src/game/spelling.js`: gap generation, shuffling, round selection, and answer checking.
 - `src/game/letter-bank.js`: bank generation and tracking individual letter tokens.
 - `src/game/levels.js`: mastery, level unlocking, and selecting pending words.
@@ -36,8 +37,11 @@ The current activity is filling missing letters, supported by a clue. Audio dict
 
 The hierarchy is **subject → chapter → word collection → level → spelling round**. A chapter with one collection opens its overview directly; the chapter step is always shown after selecting a subject.
 
-Subjects: English, Maths, Science, Computer, French. Only Science currently has content:
+Subjects: English, Maths, Science, Computer, French. English and Science currently have content:
 
+- **General** (English), chapter ID `general`, collection ID `general-words`: guardian.
+- **Going Places** (English), chapter ID `going-places`, collection ID `going-places-words`: colombia, canyon, nervous, splash, arid, granite, meadow, horizon, rabin, desert.
+- The same **Going Places** chapter also has **Words & Meanings**, stable collection ID `going-places-synonyms`, `activity: "meanings"`: skipped off, arid, parched, leap over. `word` is shown in full and `clue` stores its meaning. Opening this chapter shows both collections.
 - **Living Things**, chapter ID `living-things`, collection ID `school-hard-words`: skeleton, muscles, organs, contracts, locust, dolphin, lizard, diseases, germs, medicines.
 - **Energy**, chapter ID `energy`, collection ID `energy-hard-words`: breathe, electrical energy, environment, consumer, producer, herbivores, carnivores, omnivores, predators, prey.
 
@@ -60,7 +64,9 @@ Navigation uses static-host-friendly hashes: `#subjects`, `#subject/science`, `#
 
 ## Levels and saved progress
 
-Each collection has four levels: 1, 2, and 3 missing letters, then roughly half the letters. Always leave at least one visible letter; Level 4 must not become easier than Level 3 for short words.
+Words & Meanings has no spelling gaps or levels. Learn lists every pair; practice shuffles all pairs with the correct meaning plus up to two distinct meanings from the same collection as alternatives. Wrong choices are disabled with gentle retry feedback. A correct choice clears wrong-answer highlights, shows the full pair, and waits for Next. The summary lists all pairs and offers practice again or Back to Learn.
+
+Each spelling collection has four levels: 1, 2, and 3 missing letters, then roughly half the letters. Always leave at least one visible letter; Level 4 must not become easier than Level 3 for short words.
 
 Rounds contain up to five words. At an incomplete level, unattempted words come before attempted but unmastered words; mastered words are excluded. Thus a ten-word collection is covered in two rounds, with extra practice for tricky words. A correct attempt without help masters that word at that level. All words must be mastered to unlock the next level. Earlier levels remain replayable, and later mistakes must never remove earned mastery. No Level 5 exists.
 
@@ -70,6 +76,7 @@ Progress is local to the browser/device and stored separately per collection:
 - Other collections: `little-word-garden-v1:<collection-id>`.
 - Stored object: `{ progress, rounds }`.
 - `progress[word]` may contain legacy `wins`, previous `gaps`, and `levels[level]` with `{ attempted, mastered }`.
+- Meaning collections store `progress[word].meaning` with `{ attempted, mastered }`. An independent correct choice masters the meaning; retries never remove mastery. Legacy spelling records are retained but do not count as meaning mastery. The collection ID and storage key stay unchanged; `rounds` increments on completed meaning rounds. Storage failure does not block practice and is reported in Learn/summary.
 
 Keep collection IDs and word keys stable to preserve saved progress. Old wins and round counts remain intact, but old wins do not imply mastery at a new explicit level. Storage failure should not prevent play. On reopening a collection, select its highest unlocked level.
 

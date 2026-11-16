@@ -134,3 +134,19 @@
 .bank-letter.used { visibility: hidden; }
 .bank-hint { color: #797e73; font-size: 11px; line-height: 1.7; text-align: center; margin: 20px 0 0; }
 .admin-link { display: block; padding: 14px; color: #64785b; font-size: 11px; }
+
+/* Full words and large meaning choices, with room for longer definitions. */
+.meaning-collections { display: inline-block; padding: 14px 0; color: var(--green); font-size: 12px; }
+.meaning-learn { padding-top: 20px; }
+.meaning-learn h1 { font-size: clamp(32px, 9vw, 44px); }
+.meaning-pairs { margin: 26px 0; text-align: left; border: 1px solid #e5e1d8; border-radius: 18px; background: #fffdf9; padding: 0 20px; }
+.meaning-pairs > div { padding: 18px 0; }
+.meaning-pairs > div + div { border-top: 1px solid #e5e1d8; }
+.meaning-pairs dt { font-size: 20px; font-weight: 700; color: var(--green); overflow-wrap: anywhere; }
+.meaning-pairs dd { margin: 8px 0 0; font-size: 15px; line-height: 1.6; }
+.meaning-choices { display: grid; gap: 14px; }
+.meaning-choice { min-height: 64px; padding: 18px; width: 100%; border: 2px solid #d8cde0; border-radius: 16px; background: #fffdf9; color: #343c32; text-align: left; font-size: 17px; line-height: 1.5; overflow-wrap: anywhere; }
+.meaning-choice.correct { border-color: #8fa77b; background: #edf2e5; color: var(--green); }
+.meaning-choice.incorrect { border-color: #cc7771; background: #fff0ed; color: #a34e48; }
+.meaning-play h1 { overflow-wrap: anywhere; }
+.meaning-result { display: block; color: var(--green); font-size: 12px; margin-top: 6px; }

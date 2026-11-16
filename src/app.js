@@ -9,6 +9,7 @@ import { revealScreen } from './screens/reveal.js';
 import { summaryScreen } from './screens/summary.js';
 import { subjectsScreen, subjectScreen } from './screens/subjects.js';
 import { chapterNavigation, chapterScreen } from './screens/chapters.js';
+import { openMeanings } from './meanings.js';
 
 let lesson = getLesson();
 
@@ -28,6 +29,11 @@ function title(text) { document.title = `${text} · Little Word Garden`; }
 function home() {
   const chapter = getChapter(lesson.chapterId);
   const subject = getSubject(chapter.subjectId);
+  if (lesson.activity === 'meanings') {
+    phase = 'meanings'; homeButton.hidden = false; title(lesson.title);
+    openMeanings({ main, lesson, chapter, subject, store });
+    return;
+  }
   phase = 'home'; homeButton.hidden = false; title(chapter.title);
   main.innerHTML = chapterNavigation(subject, chapter) + homeScreen({ lesson, chapter, progress, rounds, currentLevel });
   main.querySelectorAll('[data-level]').forEach(button => button.onclick = () => {
