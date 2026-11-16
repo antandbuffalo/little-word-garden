@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import catalog from '../src/data/catalog.js';
 import { subjects } from '../src/data/lessons.js';
-import { parseCatalog, serializeCatalog, parseWords, addWords } from '../src/admin/content.js';
+import { parseCatalog, serializeCatalog, validateWords, addWords } from '../src/admin/content.js';
 import { createGitHubClient } from '../src/admin/github.js';
 import { TOKEN_KEY, tokenStore } from '../src/admin/token.js';
 import { playScreen } from '../src/screens/play.js';
@@ -22,13 +22,22 @@ test('catalog round trips as data and never executes downloaded JavaScript', asy
   assert.throws(() => parseCatalog(serializeCatalog({ chapters: [], lessons: null })), /does not contain/);
 });
 
-test('bulk entry takes clues before words, accepts tabs and phrases, and normalizes case', () => {
-  assert.deepEqual(parseWords('A pet. | CAT\r\n\nPowers lights.\tElectrical   energy'), [
-    { clue: 'A pet.', word: 'cat' }, { clue: 'Powers lights.', word: 'electrical energy' },
+test('word cards validate separate clues and words, normalize phrases, and keep clue punctuation', () => {
+  assert.deepEqual(validateWords([
+    { clue: ' A pet. ', word: 'CAT' },
+    { clue: 'Energy | power.\nUsed for lights.', word: 'Electrical   energy' },
+  ]), [
+    { clue: 'A pet.', word: 'cat' },
+    { clue: 'Energy | power.\nUsed for lights.', word: 'electrical energy' },
   ]);
-  for (const input of ['', 'missing separator', '| cat', 'Clue | a', 'Clue | café', 'Clue | cats!', 'Clue | cat | extra', 'Clue | cat\nOther | CAT']) {
-    assert.throws(() => parseWords(input));
+  assert.throws(() => validateWords([]), /at least one/);
+  assert.throws(() => validateWords([{ clue: ' ', word: 'cat' }]), /Card 1: add a clue/);
+  for (const word of ['', 'a', 'café', 'cats!']) {
+    assert.throws(() => validateWords([{ clue: 'Clue', word }]), /Card 1/);
   }
+  assert.throws(() => validateWords([
+    { clue: 'A pet.', word: 'cat' }, { clue: 'Another pet.', word: ' CAT ' },
+  ]), /Card 2:.*more than once/);
 });
 
 test('adding words preserves existing content, collection IDs and input catalog', () => {

@@ -39,9 +39,9 @@
           <div id="collection-field" hidden><label for="collection">Word collection</label><select id="collection"></select></div>
 
           <h2 class="admin-step">3. Add clues, then words</h2>
-          <label for="words">One clue and word per line</label>
-          <p id="bulk-help" class="admin-note">Separate each clue and word with a | character. You can also paste two columns from a spreadsheet, with clues first. Phrases are welcome.</p>
-          <textarea id="words" rows="7" required spellcheck="true" aria-describedby="bulk-help" placeholder="A pet that purrs. | cat&#10;The star that warms the Earth. | sun"></textarea>
+          <p class="admin-note">Add a clue and its word in each card. Words and phrases are welcome.</p>
+          <div id="word-cards"></div>
+          <button class="secondary" id="add-word" type="button">+ Add another word</button>
           <button class="secondary" type="submit">Review words</button>
 
           <section id="preview" class="admin-preview" hidden aria-labelledby="preview-heading">
@@ -54,6 +54,16 @@
         </fieldset>
         <p id="publish-status" class="admin-status" role="status"></p>
       </form>
+      <template id="word-card-template">
+        <fieldset class="word-card">
+          <legend>Word <span class="word-number"></span></legend>
+          <label data-label="clue">Clue</label>
+          <textarea data-field="clue" rows="2" required spellcheck="true" placeholder="For example, A pet that purrs."></textarea>
+          <label data-label="word">Word or phrase</label>
+          <input data-field="word" type="text" required autocapitalize="none" spellcheck="false" placeholder="For example, cat">
+          <button class="text-button remove-word" type="button">Remove word</button>
+        </fieldset>
+      </template>
     </main>
     <footer>New words. New discoveries. <span>✿</span></footer>
   </div>

@@ -22,7 +22,7 @@ The current activity is filling missing letters, supported by a clue. Audio dict
 
 - `src/data/lessons.js`: fixed subjects, re-exported catalog arrays, and lookup helpers.
 - `src/data/catalog.js`: editable chapters and word collections. Keep its exact header and JSON-after-`export default` format for the admin parser; never evaluate source loaded from GitHub. Preserve IDs and existing words when editing.
-- `admin.html`, `src/admin/`, `assets/admin.css`: parent content entry, bulk validation, GitHub API publishing, and saved token controls.
+- `admin.html`, `src/admin/`, `assets/admin.css`: parent content entry, card validation, GitHub API publishing, and saved token controls.
 - `src/app.js`: navigation, active game state, DOM events, and saving progress.
 - `src/game/spelling.js`: gap generation, shuffling, round selection, and answer checking.
 - `src/game/letter-bank.js`: bank generation and tracking individual letter tokens.
@@ -83,7 +83,7 @@ The optional Sites manifest is `.openai/hosting.json`. It points to `dist/` and 
 
 ## Admin page
 
-`admin.html` is linked from the game footer. Subjects are fixed. The owner can select or create a chapter, select an existing collection when needed, and add several words at once as `clue | word` lines or tab-separated spreadsheet rows (clues first). No word icon field is required. New/empty chapters get a default collection. Review validates additions and rejects duplicate spellings in the selected collection. Existing content, IDs, and game progress remain intact. Editing/deleting existing content is outside this version's scope.
+`admin.html` is linked from the game footer. Subjects are fixed. The owner can select or create a chapter, select an existing collection when needed, and add several words using cards with separate clue and word fields (clue first). **Add another word** appends a card and focuses its clue; **Remove word** removes extra cards while keeping at least one. Both fields are required. Adding/removing cards invalidates the review, and successful publishing resets the form to one empty card. No word icon field is required. New/empty chapters get a default collection. Review validates additions and rejects duplicate spellings in the selected collection. Existing content, IDs, and game progress remain intact. Editing/deleting existing content is outside this version's scope.
 
 The owner explicitly requested saving a manually entered GitHub personal access token in localStorage. Store it under `little-word-garden-admin-token`, restore the masked input on reopening, and provide **Clear token** to delete it and disconnect. Do not clear game progress. If storage fails, fall back to memory and report the limitation. Never embed tokens in source, commits, URLs, logs, or errors. Explain in the UI that the token is saved on this device.
 

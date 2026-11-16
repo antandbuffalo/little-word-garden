@@ -27,7 +27,7 @@ assets/styles.css       Responsive styles
 assets/admin.css        Admin form and review layouts
 src/
   app.js                Screen navigation, game state, and event handling
-  admin/                Bulk entry, GitHub API client, and saved token handling
+  admin/                Word entry, GitHub API client, and saved token handling
   data/lessons.js        Fixed subjects and catalog lookup helpers
   data/catalog.js        Editable chapters, word collections, and clues
   game/spelling.js      Gap selection, difficulty, and round selection
@@ -72,13 +72,7 @@ Open `admin.html` or the **Add words · for grown-ups** footer link. No server o
 
 1. Create a fine-grained GitHub personal access token restricted to this repository, with **Contents: Read and write**, and enter it in the admin page. **Connect & save token** saves it in localStorage under `little-word-garden-admin-token` and loads the latest content from the repository's default branch. After reopening the page, connect again to load content using the saved token.
 2. Choose a subject and select or create a chapter. Existing collections are preserved; if a chapter has several collections, select one. New or empty chapters receive a default word collection.
-3. Paste one `clue | word` pair per line, or two spreadsheet columns with clues first. No icons are requested or added for words. Existing icons remain intact. For example:
-
-   ```text
-   A pet that purrs. | cat
-   The star that warms the Earth. | sun
-   ```
-
+3. Enter the clue and word in the two separate fields in a word card. Use **Add another word** for more cards, or **Remove word** to discard an extra card. Each card requires both fields; words and phrases are supported. No icons are requested or added for words. Existing icons remain intact.
 4. **Review words** validates words and phrases, rejects duplicate entries, and previews the additions. **Publish words** commits only `src/data/catalog.js` through GitHub's Contents API. It uses the loaded file SHA to avoid overwriting concurrent edits. The success message links to the commit; Pages updates after the existing deployment finishes. On a conflict or uncertain network result, reconnect and review again; the typed draft is kept.
 
 The token stays in this browser until **Clear token** is used. Clearing it also disconnects the admin without changing spelling progress. If browser storage is blocked, the page can still publish using the in-memory token and explains that it could not save it. Use a personal device: scripts on the same origin can access localStorage. Never embed tokens in source or commits. Editing and deleting existing content are outside this version's scope.

@@ -1,11 +1,48 @@
 import { subjects } from '../data/lessons.js';
-import { parseWords, addWords } from './content.js';
+import { validateWords, addWords } from './content.js';
 import { createGitHubClient } from './github.js';
 import { tokenStore } from './token.js';
 
 const $ = selector => document.querySelector(selector);
 const tokens = tokenStore();
 let snapshot = null, client = null, pending = null;
+let nextCardId = 0;
+
+function numberCards() {
+  const cards = [...$('#word-cards').children];
+  cards.forEach((card, index) => {
+    card.querySelector('.word-number').textContent = index + 1;
+    const remove = card.querySelector('.remove-word');
+    remove.hidden = cards.length === 1;
+    remove.setAttribute('aria-label', `Remove word ${index + 1}`);
+  });
+}
+function addCard(focus = false) {
+  const card = $('#word-card-template').content.firstElementChild.cloneNode(true);
+  const id = nextCardId++;
+  for (const field of ['clue', 'word']) {
+    const input = card.querySelector(`[data-field="${field}"]`);
+    input.id = `${field}-${id}`;
+    card.querySelector(`[data-label="${field}"]`).htmlFor = input.id;
+  }
+  card.querySelector('.remove-word').addEventListener('click', () => {
+    const target = card.nextElementSibling || card.previousElementSibling;
+    card.remove();
+    numberCards();
+    invalidate();
+    status('#publish-status', '');
+    target.querySelector('[data-field="clue"]').focus();
+  });
+  $('#word-cards').append(card);
+  numberCards();
+  if (focus) card.querySelector('[data-field="clue"]').focus();
+}
+addCard();
+$('#add-word').addEventListener('click', () => {
+  addCard(true);
+  invalidate();
+  status('#publish-status', '');
+});
 
 function status(selector, message, error = false) {
   const element = $(selector);
@@ -79,7 +116,10 @@ $('#words-form').addEventListener('submit', event => {
   invalidate();
   status('#publish-status', '');
   try {
-    const words = parseWords($('#words').value);
+    const words = validateWords([...$('#word-cards').children].map(card => ({
+      clue: card.querySelector('[data-field="clue"]').value,
+      word: card.querySelector('[data-field="word"]').value,
+    })));
     pending = addWords(snapshot.catalog, {
       subjectId: $('#subject').value,
       chapterId: $('#chapter').value,
@@ -111,7 +151,8 @@ $('#publish').addEventListener('click', async () => {
     const result = await client.publish(snapshot, update.catalog, update.added);
     snapshot = { ...snapshot, catalog: update.catalog, sha: result.sha };
     $('#chapter-title').value = '';
-    $('#words').value = '';
+    $('#word-cards').replaceChildren();
+    addCard();
     chapters(update.chapter.id);
     status('#publish-status', `${update.added} ${update.added === 1 ? 'word committed' : 'words committed'}! GitHub Pages will update after deployment finishes. `);
     const link = document.createElement('a');

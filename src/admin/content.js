@@ -16,21 +16,17 @@ export function serializeCatalog(catalog) {
     JSON.stringify(catalog, null, 2) + ';\n';
 }
 
-export function parseWords(input) {
+export function validateWords(entries) {
   const words = [];
   const seen = new Set();
-  for (const [index, line] of input.split(/\r?\n/).entries()) {
-    if (!line.trim()) continue;
-    // Accept a tab from a spreadsheet, or a pipe for easy phone entry.
-    const parts = line.includes('\t') ? line.split('\t') : line.split('|');
-    if (parts.length !== 2) throw new Error(`Line ${index + 1}: use clue | word (one pair per line).`);
-    const clue = parts[0].trim();
-    const word = parts[1].trim().toLowerCase().replace(/\s+/g, ' ');
-    if (!clue) throw new Error(`Line ${index + 1}: add a clue.`);
+  for (const [index, entry] of entries.entries()) {
+    const clue = entry.clue.trim();
+    const word = entry.word.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (!clue) throw new Error(`Card ${index + 1}: add a clue.`);
     if (!/^[a-z]+(?: [a-z]+)*$/.test(word) || word.replaceAll(' ', '').length < 2) {
-      throw new Error(`Line ${index + 1}: use a word or phrase with at least two English letters, without punctuation.`);
+      throw new Error(`Card ${index + 1}: use a word or phrase with at least two English letters, without punctuation.`);
     }
-    if (seen.has(word)) throw new Error(`Line ${index + 1}: “${word}” appears more than once.`);
+    if (seen.has(word)) throw new Error(`Card ${index + 1}: “${word}” appears more than once.`);
     seen.add(word);
     words.push({ word, clue });
   }
@@ -50,7 +46,7 @@ export function addWords(catalog, { subjectId, chapterId, chapterTitle, lessonId
   const subject = subjects.find(item => item.id === subjectId);
   if (!subject) throw new Error('Choose a subject.');
   // Validate again when publishing, even if the preview was already generated.
-  const additions = parseWords(words.map(item => `${item.clue}\t${item.word}`).join('\n'));
+  const additions = validateWords(words);
   const next = structuredClone(catalog);
   let chapter = next.chapters.find(item => item.id === chapterId && item.subjectId === subjectId);
   if (chapterId === '__new__') {
