@@ -8,7 +8,7 @@ Answers check automatically when every gap is filled. Correct words get a short 
 
 Each word has a shuffled letter bank containing its missing letters plus 3–4 extras. Duplicate letters have separate tiles. Using a letter hides its tile; tapping a filled gap returns it to the bank. Replacing an incorrect letter also returns the previous tile. Physical keyboard input uses the same available letters, and Backspace returns a tile. “Show word” clears the gaps and restores the full bank when you try again.
 
-The app opens with English, Maths, Science, Computer, and French. English has General (“guardian”) and Going Places (colombia, canyon, nervous, splash, arid, granite, meadow, horizon, rabin, desert). Science has two chapters: Living Things (the original ten words) and Energy (ten words, including “electrical energy”). The other subjects show a friendly empty page until chapters are added. Phrases keep their word spacing, with each word on its own row during play; only letters become gaps.
+The app opens with English, Maths, Science, Computer, and French. English has General (“guardian”) and Going Places (colombia, canyon, nervous, splash, arid, granite, meadow, horizon, rabin, desert). Science has three chapters: Living Things (the original ten words), Energy (ten words, including “electrical energy”), and Earth and its habitats (hazardous, crust, core, magma, earthquakes, epicentre, tsunami, habitats, earth, volcanoes). The other subjects show a friendly empty page until chapters are added. Phrases keep their word spacing, with each word on its own row during play; only letters become gaps.
 
 Going Places also has a separate **Words & Meanings** collection: skipped off (to move quickly or secretly), arid (dry), parched (dried out due to heat), and leap over (to move with a large jump). Its Learn view shows every full word and meaning. Practice shows a full word or phrase with three large meaning choices. Wrong answers allow gentle retries; a correct choice clears the wrong-answer highlights, shows the pair together, and waits for Next. The summary offers practice again or Back to Learn. There are no spelling gaps or levels in this activity.
 
@@ -48,6 +48,10 @@ src/
   storage/progress.js   Device-local progress, separated by lesson
 tests/                  Game and storage checks
 scripts/package.mjs     Optional copy step for static hosting
+scripts/version.mjs     Stamp source asset/import URLs once per release
+src/updates.js          Mobile-friendly release check and Refresh prompt
+assets/updates.css      Update prompt styles
+version.json            Current release timestamp
 ```
 
 ## Add lessons, subjects, or screens
@@ -66,7 +70,13 @@ The repository is hosted on GitHub at `antandbuffalo/little-word-garden`, and th
 
 Run `npm test` for game and storage checks. Node.js is needed for tests and the optional hosting copy step, not for the browser app itself.
 
-Run `npm run package` to copy `index.html`, `admin.html`, `assets/`, and `src/` into `dist/` for static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
+Run `npm run package` to copy `index.html`, `admin.html`, `version.json`, `assets/`, and `src/` into `dist/` for optional static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
+
+Keep the existing GitHub Pages publishing setup; no custom GitHub Actions workflow or hosting settings change is needed. Before publishing code or stylesheet changes, run `npm run version`. It puts one release timestamp into `version.json`, both HTML pages, all local CSS/script URLs, and every static JavaScript import (`?v=<timestamp>`). Commit the resulting source changes with the release. This works when Pages serves the repository directly; packaging is optional. Do not add timestamps manually only to `app.js`, because imported modules have their own browser caches. When adding imports, use static relative `from` imports so the command can stamp them too.
+
+Admin content publishing still commits only `src/data/catalog.js`. On opening, the browser fetches that file without caching and parses it as JSON data; if fetching fails, it uses the bundled catalog. Admin-only word additions therefore need no timestamp command. Open pages check for a new release or changed catalog on opening, returning to the foreground, coming online, and every five minutes while visible. A change shows a large **Refresh** button. Tapping it requests a fresh HTML URL and preserves the current chapter/hash, saved progress, and saved admin token. It never reloads automatically during practice or while typing an admin draft; finish publishing the draft before refreshing. Offline or failed checks do not block practice.
+
+Pages cached before this feature cannot check for updates until their HTML expires or is refreshed. For that first visit after deployment, a fresh link such as `https://antandbuffalo.github.io/little-word-garden/?v=first-update` can request the new update-enabled page without clearing browser data.
 
 Typography uses Google Fonts with local fallbacks.
 

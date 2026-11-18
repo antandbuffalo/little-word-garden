@@ -1,7 +1,7 @@
-import { subjects } from '../data/lessons.js';
-import { validateWords, addWords } from './content.js';
-import { createGitHubClient } from './github.js';
-import { tokenStore } from './token.js';
+import { subjects } from '../data/lessons.js?v=1794964464226';
+import { validateWords, addWords } from './content.js?v=1794964464226';
+import { createGitHubClient } from './github.js?v=1794964464226';
+import { tokenStore } from './token.js?v=1794964464226';
 
 const $ = selector => document.querySelector(selector);
 const tokens = tokenStore();

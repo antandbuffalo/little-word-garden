@@ -14,6 +14,12 @@ export default {
       "icon": "⚡"
     },
     {
+      "id": "earth-and-its-habitats",
+      "subjectId": "science",
+      "title": "Earth and its habitats",
+      "icon": "🌍"
+    },
+    {
       "id": "general",
       "subjectId": "english",
       "title": "General",
@@ -138,6 +144,53 @@ export default {
           "word": "prey",
           "clue": "Animals that are hunted by other animals for food.",
           "icon": "🐁"
+        }
+      ]
+    },
+    {
+      "id": "earth-and-its-habitats-words",
+      "chapterId": "earth-and-its-habitats",
+      "title": "Earth and its habitats word collection",
+      "words": [
+        {
+          "word": "hazardous",
+          "clue": "Dangerous or likely to cause harm."
+        },
+        {
+          "word": "crust",
+          "clue": "The thin, rocky outer layer of Earth."
+        },
+        {
+          "word": "core",
+          "clue": "The very hot centre of Earth."
+        },
+        {
+          "word": "magma",
+          "clue": "Hot, melted rock beneath Earth's surface."
+        },
+        {
+          "word": "earthquakes",
+          "clue": "Sudden shaking of the ground when rocks move inside Earth."
+        },
+        {
+          "word": "epicentre",
+          "clue": "The place on Earth's surface above where an earthquake starts."
+        },
+        {
+          "word": "tsunami",
+          "clue": "A series of powerful sea waves, often caused by an earthquake under the sea."
+        },
+        {
+          "word": "habitats",
+          "clue": "Natural homes where plants and animals live."
+        },
+        {
+          "word": "earth",
+          "clue": "The planet we live on."
+        },
+        {
+          "word": "volcanoes",
+          "clue": "Openings in Earth's crust where lava, ash and gases can come out."
         }
       ]
     },

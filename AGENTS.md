@@ -15,7 +15,8 @@ Spelling collections use missing letters supported by a clue. Collections with `
 - Run source files directly through HTTP. No build or dependency installation is required for development.
 - `npm run dev`: Python 3 static server at port 5173, bound to all interfaces for phone testing on the same Wi-Fi.
 - `npm test`: Node's built-in test runner.
-- `npm run package`: copies website source to ignored `dist/` for hosting. It does not compile or bundle code.
+- `npm run package`: copies website source and `version.json` to ignored `dist/` for optional hosting. It does not compile or bundle code.
+- `npm run version`: stamps tracked HTML, CSS/script URLs, static module imports, and `version.json` with one release timestamp. Run before publishing code/style changes and include the resulting source changes in the release.
 - Edit source, never generated `dist/`. Keep `.gitignore` exclusions for output, dependencies, local secrets, and logs.
 
 ## Where changes belong
@@ -31,6 +32,9 @@ Spelling collections use missing letters supported by a clue. Collections with `
 - `src/screens/`: rendering functions that return HTML. `levels.js` renders the level picker; `home.js` renders a chapter collection overview.
 - `src/storage/progress.js`: localStorage access and graceful storage failure handling.
 - `assets/styles.css`: shared mobile layouts, feedback animations, and reduced-motion support.
+- `src/updates.js`, `assets/updates.css`: release/content checks and the large mobile Refresh prompt.
+- `scripts/version.mjs`, `version.json`: source URL timestamp stamping and current release metadata; no custom Actions workflow or Pages settings change required.
+- `src/data/fresh-catalog.js`: uncached deployed catalog loading as JSON data, with a bundled fallback in `lessons.js`.
 - `tests/`: game, token inventory, level progression, storage compatibility, and screen rendering checks.
 
 ## Content and navigation
@@ -44,6 +48,7 @@ Subjects: English, Maths, Science, Computer, French. English and Science current
 - The same **Going Places** chapter also has **Words & Meanings**, stable collection ID `going-places-synonyms`, `activity: "meanings"`: skipped off, arid, parched, leap over. `word` is shown in full and `clue` stores its meaning. Opening this chapter shows both collections.
 - **Living Things**, chapter ID `living-things`, collection ID `school-hard-words`: skeleton, muscles, organs, contracts, locust, dolphin, lizard, diseases, germs, medicines.
 - **Energy**, chapter ID `energy`, collection ID `energy-hard-words`: breathe, electrical energy, environment, consumer, producer, herbivores, carnivores, omnivores, predators, prey.
+- **Earth and its habitats** (Science), chapter ID `earth-and-its-habitats`, collection ID `earth-and-its-habitats-words`: hazardous, crust, core, magma, earthquakes, epicentre, tsunami, habitats, earth, volcanoes.
 
 Other subjects show friendly empty states. Do not invent school content just to fill them.
 
@@ -85,6 +90,12 @@ Keep collection IDs and word keys stable to preserve saved progress. Old wins an
 Run `npm test` for behavior changes and `npm run package` when changing website source or packaging. Verify the affected navigation and interaction flow; pay particular attention to duplicate tokens, phrases, retries, level unlocking, replay, and persistence when applicable. Check mobile layout in a browser when available; rendering tests alone do not verify visual appearance. Report any verification limits honestly.
 
 The repository is on GitHub at `antandbuffalo/little-word-garden`; the owner confirmed the live app is already deployed on GitHub Pages. Content publishing commits via the GitHub API for the existing automatic Pages deployment. Use that setup without re-verifying hosting, as requested by the owner. Do not switch hosting providers.
+
+The owner prefers timestamp URLs and the existing GitHub Pages publishing setup. Do not add a custom Actions workflow or require a Pages settings change for cache invalidation. Run `npm run version` before code/style releases to stamp source URLs and all static relative `from` imports; include these source edits and `version.json` when committing a release. Packaging remains optional. Keep new module imports static and relative so the stamping command covers them. Do not edit the catalog format or content while stamping.
+
+The browser fetches the deployed catalog with `cache: 'no-store'` and a fresh check timestamp, parses it using the existing JSON-only catalog parser, and falls back to the imported catalog on failure. Node tests use the imported catalog directly. This lets admin content-only commits appear without restamping other files; publishing must still write only `src/data/catalog.js`.
+
+Check `version.json` and, if the release timestamp is unchanged, the deployed catalog on opening, foreground return, going online, and every five visible minutes. Use uncached requests, throttle to at most one check per 15 seconds, and ignore failures. Show **Refresh** for a different valid 13-digit release timestamp or a catalog different from the loaded snapshot; never auto-reload. On tap replace only the `v` query parameter and keep the path, other query parameters, and hash. Never clear browser storage. Admin copy reminds the parent to finish publishing first; typed drafts are not persisted. Pre-feature cached HTML cannot self-update until refreshed/expired; a fresh page query can bootstrap its first update-enabled visit.
 
 The optional Sites manifest is `.openai/hosting.json`. It points to `dist/` and is not the confirmed live hosting provider. Previous Sites publishing and browser-preview attempts were blocked by the execution environment; a manifest or successful packaging command is not evidence of a live deployment. Keep hosting identity intact and consult the applicable Sites workflow if Sites publishing is requested.
 

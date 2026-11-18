@@ -1,4 +1,4 @@
-import { LEVELS, levelStatus, unlockedLevel } from '../game/levels.js';
+import { LEVELS, levelStatus, unlockedLevel } from '../game/levels.js?v=1794964464226';
 
 export function levelPicker({ words, progress, currentLevel }) {
   const unlocked = unlockedLevel(words, progress);

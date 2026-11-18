@@ -1,4 +1,11 @@
-import catalog from './catalog.js';
+import fallbackCatalog from './catalog.js?v=1794964464226';
+import { loadCatalog } from './fresh-catalog.js?v=1794964464226';
+
+// Admin publishes only catalog.js, so fetch it fresh independently of releases.
+// Tests use the local module; a network failure in the browser keeps its fallback.
+const catalog = typeof window === 'undefined' ? fallbackCatalog
+  : await loadCatalog(fallbackCatalog, new URL('./catalog.js', import.meta.url));
+export const catalogSnapshot = JSON.stringify(catalog);
 
 // Keep stable IDs: progress is saved separately for each lesson.
 export const subjects = [

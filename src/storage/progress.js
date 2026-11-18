@@ -1,4 +1,4 @@
-import { DEFAULT_LESSON_ID } from '../data/lessons.js';
+import { DEFAULT_LESSON_ID } from '../data/lessons.js?v=1794964464226';
 
 // Preserve the first version's progress; new lessons get their own storage key.
 export function createProgressStore(lessonId, storage) {

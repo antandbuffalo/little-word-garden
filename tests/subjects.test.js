@@ -46,14 +46,16 @@ test('empty subjects offer navigation without starting an empty game', () => {
   assert.ok(!html.includes('id="start"'));
 });
 
-test('Science lists Living Things and Energy before showing their words', () => {
+test('Science lists its three chapters before showing their words', () => {
   const subjectChapters = getSubjectChapters('science');
-  assert.equal(subjectChapters.length, 2);
+  assert.equal(subjectChapters.length, 3);
   assert.equal(subjectChapters[0].title, 'Living Things');
   const html = subjectScreen({ subject: getSubject('science'), chapters: subjectChapters, lessons });
   assert.ok(html.includes('Choose a chapter to explore.'));
   assert.ok(html.includes('href="#chapter/living-things"'));
   assert.ok(html.includes('href="#chapter/energy"'));
+  assert.ok(html.includes('href="#chapter/earth-and-its-habitats"'));
+  assert.ok(html.includes('Earth and its habitats'));
   assert.ok(html.includes('10 words to discover'));
   assert.ok(!html.includes('id="start"'));
   assert.equal(getChapterLessons('living-things')[0].id, 'school-hard-words');
@@ -61,5 +63,9 @@ test('Science lists Living Things and Energy before showing their words', () => 
   assert.deepEqual(getChapterLessons('energy')[0].words.map(item => item.word), [
     'breathe', 'electrical energy', 'environment', 'consumer', 'producer',
     'herbivores', 'carnivores', 'omnivores', 'predators', 'prey',
+  ]);
+  assert.deepEqual(getChapterLessons('earth-and-its-habitats')[0].words.map(item => item.word), [
+    'hazardous', 'crust', 'core', 'magma', 'earthquakes', 'epicentre',
+    'tsunami', 'habitats', 'earth', 'volcanoes',
   ]);
 });

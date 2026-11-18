@@ -1,15 +1,15 @@
-import { getLesson, getSubject, getChapter, getSubjectChapters, getChapterLessons, subjects, chapters, lessons } from './data/lessons.js';
-import { makeGaps, shuffle, assessAttempt } from './game/spelling.js';
-import { chooseLevelRound, levelStatus, unlockedLevel, recordLevelAttempt } from './game/levels.js';
-import { createLetterBank, availableTiles, placeTile, lettersForPlacements } from './game/letter-bank.js';
-import { createProgressStore } from './storage/progress.js';
-import { homeScreen } from './screens/home.js';
-import { playScreen } from './screens/play.js';
-import { revealScreen } from './screens/reveal.js';
-import { summaryScreen } from './screens/summary.js';
-import { subjectsScreen, subjectScreen } from './screens/subjects.js';
-import { chapterNavigation, chapterScreen } from './screens/chapters.js';
-import { openMeanings } from './meanings.js';
+import { getLesson, getSubject, getChapter, getSubjectChapters, getChapterLessons, subjects, chapters, lessons } from './data/lessons.js?v=1794964464226';
+import { makeGaps, shuffle, assessAttempt } from './game/spelling.js?v=1794964464226';
+import { chooseLevelRound, levelStatus, unlockedLevel, recordLevelAttempt } from './game/levels.js?v=1794964464226';
+import { createLetterBank, availableTiles, placeTile, lettersForPlacements } from './game/letter-bank.js?v=1794964464226';
+import { createProgressStore } from './storage/progress.js?v=1794964464226';
+import { homeScreen } from './screens/home.js?v=1794964464226';
+import { playScreen } from './screens/play.js?v=1794964464226';
+import { revealScreen } from './screens/reveal.js?v=1794964464226';
+import { summaryScreen } from './screens/summary.js?v=1794964464226';
+import { subjectsScreen, subjectScreen } from './screens/subjects.js?v=1794964464226';
+import { chapterNavigation, chapterScreen } from './screens/chapters.js?v=1794964464226';
+import { openMeanings } from './meanings.js?v=1794964464226';
 
 let lesson = getLesson();
 

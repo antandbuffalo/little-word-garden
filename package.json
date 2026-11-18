@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "python3 -m http.server 5173 --bind 0.0.0.0",
     "test": "node --test tests/*.test.js",
+    "version": "node scripts/version.mjs",
     "package": "node scripts/package.mjs"
   }
 }

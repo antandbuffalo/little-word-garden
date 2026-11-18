@@ -1,0 +1,37 @@
+/* Large, always-visible update control for mobile browsers. */
+body:has(> .update-banner) { padding-bottom: 160px; }
+.update-banner {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+  border: 1px solid #d6daca;
+  border-radius: 16px 16px 0 0;
+  background: #eef0e6;
+  color: #343c32;
+  font: 14px/1.5 system-ui, sans-serif;
+}
+.update-banner p { flex: 1; min-width: 0; margin: 0; }
+.update-banner button {
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #425d44;
+  color: #fffef6;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.update-banner button:focus-visible { outline: 3px solid #9177b2; outline-offset: 3px; }

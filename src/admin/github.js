@@ -1,4 +1,4 @@
-import { parseCatalog, serializeCatalog } from './content.js';
+import { parseCatalog, serializeCatalog } from './content.js?v=1794964464226';
 
 const repository = 'antandbuffalo/little-word-garden';
 const contentPath = 'src/data/catalog.js';

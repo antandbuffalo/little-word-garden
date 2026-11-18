@@ -1,4 +1,4 @@
-import { escapeHTML } from './html.js';
+import { escapeHTML } from './html.js?v=1794964464226';
 export function chapterNavigation(subject, chapter) {
   return `<nav class="subject-navigation" aria-label="Chapter navigation">
     <a href="#subject/${subject.id}">← ${subject.title} chapters</a>

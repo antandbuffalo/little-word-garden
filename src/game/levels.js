@@ -1,4 +1,4 @@
-import { chooseRound, shuffle } from './spelling.js';
+import { chooseRound, shuffle } from './spelling.js?v=1794964464226';
 
 export const LEVELS = [
   { id: 1, description: '1 missing letter' },
