@@ -1,5 +1,5 @@
-import { escapeHTML } from './html.js?v=1794964464226';
-import { levelPicker } from './levels.js?v=1794964464226';
+import { escapeHTML } from './html.js?v=1794964801440';
+import { levelPicker } from './levels.js?v=1794964801440';
 
 export function homeScreen({ lesson, chapter, progress, rounds, currentLevel = 1 }) {
   return `<section class="welcome"><div class="eyebrow"><span></span> ${chapter ? 'LET’S EXPLORE THIS CHAPTER' : 'YOUR LITTLE LEARNING SPACE'}</div><h1>${chapter ? escapeHTML(chapter.title) : 'Little words.<br>Big <em>discoveries.</em>'}</h1><p class="intro">Choose a level.<br>Grow one word at a time.</p>${levelPicker({ words: lesson.words, progress, currentLevel })}<button class="primary start" id="start">Play Level ${currentLevel} <span>↗</span></button><div class="round-note">${Math.min(5, lesson.words.length)} words · no timer · just you!</div></section>

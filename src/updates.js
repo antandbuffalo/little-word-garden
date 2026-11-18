@@ -1,5 +1,5 @@
-import { catalogSnapshot } from './data/lessons.js?v=1794964464226';
-import { fetchCatalog } from './data/fresh-catalog.js?v=1794964464226';
+import { catalogSnapshot } from './data/lessons.js?v=1794964801440';
+import { fetchCatalog } from './data/fresh-catalog.js?v=1794964801440';
 
 export function updateURL(href, version) {
   const url = new URL(href);

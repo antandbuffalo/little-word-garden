@@ -1,4 +1,4 @@
-import { shuffle } from './spelling.js?v=1794964464226';
+import { shuffle } from './spelling.js?v=1794964801440';
 
 export function meaningRound(words) {
   return shuffle(words).map(item => ({

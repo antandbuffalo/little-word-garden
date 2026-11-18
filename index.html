@@ -4,19 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#faf7f2">
-  <meta name="app-version" content="1794964464226">
+  <meta name="app-version" content="1794964801440">
   <meta name="description" content="A little spelling adventure with your school words. Fill the gaps and grow your word garden.">
   <title>Little Word Garden</title>
-  <link rel="stylesheet" href="assets/styles.css?v=1794964464226">
-  <link rel="stylesheet" href="assets/updates.css?v=1794964464226">
-  <script type="module" src="src/updates.js?v=1794964464226"></script>
-  <script type="module" src="src/app.js?v=1794964464226"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.css?v=1794964801440">
+  <link rel="stylesheet" href="assets/updates.css?v=1794964801440">
+  <script type="module" src="src/updates.js?v=1794964801440"></script>
+  <script type="module" src="src/app.js?v=1794964801440"></script>
+  <script type="module" src="src/install.js?v=1794964801440"></script>
 </head>
 <body>
   <div class="app">
     <header><a class="brand" href="#subjects" aria-label="Word Garden subjects"><span class="brand-icon">✿</span><span>word garden<small>A LITTLE PRACTICE. A LOT OF GROWING.</small></span></a><button id="home-button" class="icon-button" aria-label="Return to subjects" hidden>⌂</button></header>
     <main id="main"></main>
-    <footer>Made for little minds with big possibilities <span>✿</span><a class="admin-link" href="admin.html">Add words · for grown-ups</a></footer>
+    <footer><button id="install-app" class="install-button" type="button" hidden>Install app</button><p id="install-status" role="status" hidden></p>Made for little minds with big possibilities <span>✿</span><a class="admin-link" href="admin.html">Add words · for grown-ups</a></footer>
   </div>
 </body>
 </html>

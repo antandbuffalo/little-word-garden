@@ -1,6 +1,6 @@
-import { meaningRound, recordMeaningAttempt } from './game/meanings.js?v=1794964464226';
-import { meaningLearnScreen, meaningPlayScreen, meaningSummaryScreen } from './screens/meanings.js?v=1794964464226';
-import { chapterNavigation } from './screens/chapters.js?v=1794964464226';
+import { meaningRound, recordMeaningAttempt } from './game/meanings.js?v=1794964801440';
+import { meaningLearnScreen, meaningPlayScreen, meaningSummaryScreen } from './screens/meanings.js?v=1794964801440';
+import { chapterNavigation } from './screens/chapters.js?v=1794964801440';
 
 export function openMeanings({ main, lesson, chapter, subject, store }) {
   let { progress, rounds } = store.load();

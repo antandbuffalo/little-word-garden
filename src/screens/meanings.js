@@ -1,4 +1,4 @@
-import { escapeHTML } from './html.js?v=1794964464226';
+import { escapeHTML } from './html.js?v=1794964801440';
 
 export function meaningLearnScreen({ lesson, progress, storageAvailable = true }) {
   const mastered = lesson.words.filter(item => progress[item.word]?.meaning?.mastered).length;

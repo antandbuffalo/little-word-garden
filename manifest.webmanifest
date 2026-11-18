@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "Little Word Garden",
+  "short_name": "Word Garden",
+  "description": "A little spelling adventure with your school words.",
+  "lang": "en",
+  "start_url": "./#subjects",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#faf7f2",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "assets/icons/garden-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/garden-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/garden-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

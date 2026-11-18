@@ -22,15 +22,27 @@ From this directory, run `npm run dev` and open http://localhost:5173. Python 3 
 
 To try it on a phone connected to the same Wi-Fi, open `http://<your-computer-LAN-IP>:5173`. Your computer must allow incoming connections to this port.
 
+## Install on Android
+
+After this version is published to GitHub Pages, open the HTTPS app address in Chrome on Android. Tap **Install app** in the game footer when Chrome offers it, then confirm installation. You can also use Chrome's menu → **Add to Home screen** → **Install** (wording varies by browser). If the button has not appeared, interact with the page and give Chrome time to offer installation. Installation availability is controlled by the browser.
+
+The **Word Garden** flower icon launches the subject picker in its own app window. Relative manifest paths support the existing `/little-word-garden/` GitHub Pages path. Progress stays in the same browser's local storage; installation does not clear it. Install from the browser/profile where you already practise to keep using that progress.
+
+The installed app still needs an internet connection to open. There is no offline service worker or additional asset cache; timestamp URLs and the **Refresh** prompt continue to handle updates. HTTPS is required for installation on Android; the local Wi-Fi HTTP address is for game testing only. Check actual installation on an Android device after deployment.
+
+Launcher PNGs are committed in `assets/icons/`. Regenerate the simple flower artwork without dependencies using `python3 scripts/icons.py`.
+
 ## Project structure
 
 ```text
 index.html              Shared page shell and entry point
+manifest.webmanifest    Android app identity, launcher icons, scope and start URL
 admin.html              Parent-only content entry and GitHub publishing page
 assets/styles.css       Responsive styles
 assets/admin.css        Admin form and review layouts
 src/
   app.js                Screen navigation, game state, and event handling
+  install.js            Browser-controlled Install app button and feedback
   admin/                Word entry, GitHub API client, and saved token handling
   data/lessons.js        Fixed subjects and catalog lookup helpers
   data/catalog.js        Editable chapters, word collections, and clues
@@ -70,7 +82,7 @@ The repository is hosted on GitHub at `antandbuffalo/little-word-garden`, and th
 
 Run `npm test` for game and storage checks. Node.js is needed for tests and the optional hosting copy step, not for the browser app itself.
 
-Run `npm run package` to copy `index.html`, `admin.html`, `version.json`, `assets/`, and `src/` into `dist/` for optional static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
+Run `npm run package` to copy `index.html`, `admin.html`, `manifest.webmanifest`, `version.json`, `assets/`, and `src/` into `dist/` for optional static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
 
 Keep the existing GitHub Pages publishing setup; no custom GitHub Actions workflow or hosting settings change is needed. Before publishing code or stylesheet changes, run `npm run version`. It puts one release timestamp into `version.json`, both HTML pages, all local CSS/script URLs, and every static JavaScript import (`?v=<timestamp>`). Commit the resulting source changes with the release. This works when Pages serves the repository directly; packaging is optional. Do not add timestamps manually only to `app.js`, because imported modules have their own browser caches. When adding imports, use static relative `from` imports so the command can stamp them too.
 

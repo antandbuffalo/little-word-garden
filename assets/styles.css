@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;650;700&family=Fraunces:ital,wght@0,500;0,600;1,500&display=swap');
 
+.install-button {
+  display: block;
+  min-height: 48px;
+  margin: 0 auto 16px;
+  padding: 12px 24px;
+  border: 1px solid #d6daca;
+  border-radius: 14px;
+  background: #eef0e6;
+  color: #425d44;
+  font-size: 14px;
+  font-weight: 600;
+}
+#install-status { color: #425d44; font-size: 13px; line-height: 1.6; }
+
 .level-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 25px 0; text-align: left; }
 .level-card { padding: 15px 12px; min-height: 112px; border: 1px solid #dedbcf; border-radius: 15px; background: #fffdf9; color: #425d44; text-align: left; }
 .level-card.chosen { border: 2px solid #8a739f; background: #f1eaf6; padding: 14px 11px; box-shadow: 0 3px 0 #d7c9e1; }

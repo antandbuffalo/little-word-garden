@@ -33,6 +33,7 @@ Spelling collections use missing letters supported by a clue. Collections with `
 - `src/storage/progress.js`: localStorage access and graceful storage failure handling.
 - `assets/styles.css`: shared mobile layouts, feedback animations, and reduced-motion support.
 - `src/updates.js`, `assets/updates.css`: release/content checks and the large mobile Refresh prompt.
+- `manifest.webmanifest`, `src/install.js`, `assets/icons/`: Android home-screen installation, browser-controlled Install app button, and flower launcher icons. Regenerate icons with `python3 scripts/icons.py` (standard library only).
 - `scripts/version.mjs`, `version.json`: source URL timestamp stamping and current release metadata; no custom Actions workflow or Pages settings change required.
 - `src/data/fresh-catalog.js`: uncached deployed catalog loading as JSON data, with a bundled fallback in `lessons.js`.
 - `tests/`: game, token inventory, level progression, storage compatibility, and screen rendering checks.
@@ -98,6 +99,12 @@ The browser fetches the deployed catalog with `cache: 'no-store'` and a fresh ch
 Check `version.json` and, if the release timestamp is unchanged, the deployed catalog on opening, foreground return, going online, and every five visible minutes. Use uncached requests, throttle to at most one check per 15 seconds, and ignore failures. Show **Refresh** for a different valid 13-digit release timestamp or a catalog different from the loaded snapshot; never auto-reload. On tap replace only the `v` query parameter and keep the path, other query parameters, and hash. Never clear browser storage. Admin copy reminds the parent to finish publishing first; typed drafts are not persisted. Pre-feature cached HTML cannot self-update until refreshed/expired; a fresh page query can bootstrap its first update-enabled visit.
 
 The optional Sites manifest is `.openai/hosting.json`. It points to `dist/` and is not the confirmed live hosting provider. Previous Sites publishing and browser-preview attempts were blocked by the execution environment; a manifest or successful packaging command is not evidence of a live deployment. Keep hosting identity intact and consult the applicable Sites workflow if Sites publishing is requested.
+
+## Android installation
+
+The game is installable from HTTPS with a manifest using relative `id`, `scope`, and `start_url` paths for GitHub Pages project hosting. Launch opens `#subjects` in standalone mode. The footer Install app button is hidden until a `beforeinstallprompt` event supplies a usable browser prompt; only a user tap triggers installation. Hide it after use, on installation, or in standalone mode. Browser-menu installation is also available. Browsers control eligibility and timing; verify real Android installation after deployment. Local Wi-Fi HTTP is for testing play, not Android installation.
+
+Installation retains same-origin browser storage and the existing release/catalog Refresh flow. It does not add offline support or a service worker. An internet connection is still needed to open the app; avoid adding asset caches that could interfere with content updates. Packaging includes `manifest.webmanifest` and the icons. Keep the manifest identity stable across releases.
 
 ## Admin page
 

@@ -1,4 +1,4 @@
-import { escapeHTML } from './html.js?v=1794964464226';
+import { escapeHTML } from './html.js?v=1794964801440';
 export function subjectsScreen({ subjects, chapters, lessons }) {
   return `
     <section class="subjects-page">
