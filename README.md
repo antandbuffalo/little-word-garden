@@ -16,6 +16,8 @@ Meaning progress is saved separately from spelling. A correct answer without ret
 
 Each spelling collection has four levels: one, two, three, then roughly half its letters missing. Short words always keep a visible letter, and Level 4 never hides fewer letters than Level 3. Finish all words in a collection without help at the current level to unlock the next. Rounds contain up to five words, favouring unattempted words before returning to tricky ones. Mistakes or hints require another independent attempt; they never remove earned mastery. Earlier levels remain replayable. Existing wins and round counts are preserved, while the new level tracking starts at Level 1 because old results did not record levels.
 
+Science also links to **Study notes** for Earth and its habitats. The illustrated notebook page is stored in `earth-and-its-habitats.html` and included in the static package.
+
 ## Run
 
 From this directory, run `npm run dev` and open http://localhost:5173. Python 3 runs the static server; npm is just a shortcut. You can also use any static HTTP server. JavaScript modules require HTTP rather than opening the HTML file directly.
@@ -82,7 +84,7 @@ The repository is hosted on GitHub at `antandbuffalo/little-word-garden`, and th
 
 Run `npm test` for game and storage checks. Node.js is needed for tests and the optional hosting copy step, not for the browser app itself.
 
-Run `npm run package` to copy `index.html`, `admin.html`, `manifest.webmanifest`, `version.json`, `assets/`, and `src/` into `dist/` for optional static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
+Run `npm run package` to copy `index.html`, `admin.html`, `earth-and-its-habitats.html`, `manifest.webmanifest`, `version.json`, `assets/`, and `src/` into `dist/` for optional static hosting. This does not compile or bundle anything. Edit source files at the project root, never the generated `dist/` folder. The optional Sites manifest points to that deployment folder.
 
 Keep the existing GitHub Pages publishing setup; no custom GitHub Actions workflow or hosting settings change is needed. Before publishing code or stylesheet changes, run `npm run version`. It puts one release timestamp into `version.json`, both HTML pages, all local CSS/script URLs, and every static JavaScript import (`?v=<timestamp>`). Commit the resulting source changes with the release. This works when Pages serves the repository directly; packaging is optional. Do not add timestamps manually only to `app.js`, because imported modules have their own browser caches. When adding imports, use static relative `from` imports so the command can stamp them too.
 

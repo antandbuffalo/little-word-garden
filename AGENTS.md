@@ -57,6 +57,8 @@ Subjects have stable `id` values; chapters reference `subjectId`; collections re
 
 Navigation uses static-host-friendly hashes: `#subjects`, `#subject/science`, `#chapter/living-things`, `#chapter/energy`, and `#lesson/<collection-id>`. Preserve reloads, deep links, and browser Back behavior when changing navigation.
 
+Science also links to **Study notes** for Earth and its habitats. The illustrated notebook page is stored in `earth-and-its-habitats.html` and included in the static package.
+
 ## Interaction rules
 
 - Use a small shuffled bank containing all required missing letters, including duplicates, plus 3–4 extra letters. Do not restore a full on-screen keyboard unless requested.

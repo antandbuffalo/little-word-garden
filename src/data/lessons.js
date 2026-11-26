@@ -1,5 +1,5 @@
-import fallbackCatalog from './catalog.js?v=1794964801440';
-import { loadCatalog } from './fresh-catalog.js?v=1794964801440';
+import fallbackCatalog from './catalog.js?v=1795702967401';
+import { loadCatalog } from './fresh-catalog.js?v=1795702967401';
 
 // Admin publishes only catalog.js, so fetch it fresh independently of releases.
 // Tests use the local module; a network failure in the browser keeps its fallback.

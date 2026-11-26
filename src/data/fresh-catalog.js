@@ -1,4 +1,4 @@
-import { parseCatalog } from '../admin/content.js?v=1794964801440';
+import { parseCatalog } from '../admin/content.js?v=1795702967401';
 
 export async function fetchCatalog(url, request = globalThis.fetch) {
   const fresh = new URL(url);

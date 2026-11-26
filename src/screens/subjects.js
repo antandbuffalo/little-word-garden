@@ -1,4 +1,4 @@
-import { escapeHTML } from './html.js?v=1794964801440';
+import { escapeHTML } from './html.js?v=1795702967401';
 export function subjectsScreen({ subjects, chapters, lessons }) {
   return `
     <section class="subjects-page">
@@ -54,5 +54,14 @@ export function subjectScreen({ subject, chapters, lessons }) {
         <p class="intro">New words will grow here soon.<br>Try Science for a little spelling adventure!</p>
         <a class="primary subject-action" href="#subject/science">Explore Science <span>→</span></a>
         <a class="text-button" href="#subjects">Choose another subject</a>`}
+      ${subject.id === 'science' ? `
+        <nav class="subject-list" aria-label="Science study notes">
+          <a class="subject-card subject-science" href="earth-and-its-habitats.html">
+            <span class="subject-icon" aria-hidden="true">📖</span>
+            <span class="subject-copy"><span class="subject-title">Study notes</span>
+            <span class="subject-description">Earth and its habitats</span></span>
+            <span class="subject-arrow" aria-hidden="true">→</span>
+          </a>
+        </nav>` : ''}
     </section>`;
 }
